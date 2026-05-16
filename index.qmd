@@ -217,7 +217,7 @@ Indica el porcentaje acumulado hasta cada categoría o valor.
 **Estructura general de una tabla unidimensional**
 
 | Valor $xix_ixi$​ | Frecuencia absoluta $fif_ifi$​ | Frecuencia relativa $hih_ihi$​ | Porcentaje $pip_ipi$​ | Frecuencia acumulada $FiF_iFi$​ | Frecuencia relativa acumulada $HiH_iHi$​ |
-|------------|------------|------------|------------|------------|------------|
+|----|----|----|----|----|----|
 | $x1x_1x1$​ | $f1f_1f1$​ | $h1h_1h1$​ | $p1p_1p1$​ | $F1F_1F1$​ | $H1H_1H1$​ |
 | $x2x_2x2$​ | $f2f_2f2$​ | $h2h_2h2$​ | $p2p_2p2$​ | $F2F_2F2$​ | $H2H_2H2$​ |
 | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ |
@@ -976,7 +976,7 @@ Estas son esenciales para estudiar asociación o dependencia entre variables.
 **Estructura general de una tabla de contingencia**
 
 | $X\YX \backslash YX\\Y$ | $y1y_1y1$​ | $y2y_2y2$​ | ⋯\cdots⋯ | $ycy_cyc$​ | Total |
-|------------|------------|------------|------------|------------|------------|
+|----|----|----|----|----|----|
 | $x1x_1x1$​ | $f11f_{11}f11$​ | $f12f_{12}f12$​ | ⋯\cdots⋯ | $f1cf_{1c}f1c$​ | $f1⋅f_{1\cdot}f1$⋅​ |
 | $x2x_2x2$​ | \$ f21f\_{21}f21​\$ | \$f22f\_{22}f22​ \$ | ⋯\cdots⋯ | $f2cf_{2c}f2c​$ | $f2⋅f_{2\cdot}f2⋅$​ |
 | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋱\ddots⋱ | ⋮\vdots⋮ | ⋮\vdots⋮ |
