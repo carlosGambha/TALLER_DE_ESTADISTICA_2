@@ -1,0 +1,1024 @@
+---
+title: "DISTRIBUCIONES DE FRECUENCIAS"
+subtitle: "TALLER_2"
+date: today
+
+author:
+  - name: Jaime Antonio Rodriguez<br>Diana Marcela Rueda<br>Carlos Alberto Gamba<br>Ingrid Yulieth Valencia
+    affiliation: "Escuela Superior de Administracion Publica"
+    affiliation-url: "https://www.esap.edu.co/"
+
+lang: es
+
+title-block-banner: "#3F1053"
+
+format:
+  html:
+    page-layout: full
+    fontsize: 12pt
+    toc: true
+    toc-location: right
+    number-sections: true
+    code-fold: true
+    code-summary: "Ver código"
+    html-math-method: katex
+    smooth-scroll: true
+    link-external-icon: true
+    link-external-newwindow: true
+    citations-hover: true
+    footnotes-hover: true
+    theme: dark
+    highlight-style: monokai
+    code-overflow: scroll
+    background-color: "#EDA698"
+    color: "#333333"
+    link-color: "#3892f8"
+    heading-color: "#3892f8"
+
+editor: visual
+
+knitr:
+  opts_chunk:
+    message: false
+    warning: false
+    fig.align: center
+    fig.width: 6
+    fig.height: 6
+    out.width: "70%"
+
+# bibliography: references.bib
+---
+
+```{=html}
+<div style="position: absolute; top: 10px; right: 10px;">
+  <img src="esap.png" alt="Logo Esap" style="width: 150px; height: auto;">
+</div>
+```
+
+```{=html}
+<style type="text/css">
+  body {
+    font-size: 130%;
+    text-align: justify;
+  }
+</style>
+```
+
+# Cargar Paquetes
+
+```{r}
+ipak <- function(pkg){
+  
+  # Definir repositorio CRAN (evita el error del mirror)
+  options(repos = c(CRAN = "https://cloud.r-project.org"))
+  
+  # Identificar paquetes instalados
+  installed <- rownames(installed.packages())
+  
+  # Identificar paquetes faltantes
+  new.pkg <- setdiff(pkg, installed)
+  
+  # Instalar paquetes faltantes
+  if(length(new.pkg) > 0){
+    install.packages(new.pkg, dependencies = TRUE)
+  }
+  
+  # Cargar paquetes sin mostrar mensajes
+  invisible(lapply(pkg, function(p){
+    suppressPackageStartupMessages(
+      library(p, character.only = TRUE)
+    )
+  }))
+}
+
+# Crear la lista de los paquetes a utilizar
+packages <- c("tidyverse", "kableExtra", "readxl")
+
+# Instalar y cargar los paquetes del listado anterior
+ipak(packages)
+```
+
+# Introduccion
+
+**Tablas de frecuencias unidimensionales y tablas de contingencia**
+
+**Enfoque estadístico y analítico**
+
+Las tablas de frecuencias son herramientas fundamentales de la estadística descriptiva porque permiten organizar, resumir e interpretar datos. Desde una perspectiva analítica, cumplen una función clave: transformar datos crudos en información estructurada, facilitando la identificación de patrones, tendencias y relaciones entre variables.
+
+**Tablas de frecuencias unidimensionales**
+
+Una tabla de frecuencias unidimensional resume la distribución de una sola variable XXX, ya sea cualitativa o cuantitativa.
+
+Su objetivo es responder:
+
+-   ¿Qué valores toma la variable?
+
+-   ¿Con qué frecuencia aparecen?
+
+-   ¿Cómo se distribuyen proporcionalmente?
+
+-   ¿Cómo se acumulan los datos?
+
+**Definición**
+
+Sea una variable estadística XXX con kkk categorías o valores distintos:
+
+$$x1,x2,x3,…,xkx_1, x_2, x_3, \dots, x_kx1​,x2​,x3​,…,xk​$$
+
+y un total de observaciones:
+
+$NNN$
+
+La tabla de frecuencias organiza cada valor xix_ixi​ con sus respectivas frecuencias.
+
+**Tipos de frecuencias (unidimensional)**
+
+**a) Frecuencia absoluta** $$(fi o ni)(f_i \text{ o } n_i)(fi​ o ni​)$$
+
+Es el número de veces que aparece un valor xix_ixi​ en el conjunto de datos.
+
+fi=nif_i = n_ifi​=ni​
+
+**Interpretación:**
+
+Indica cuántas observaciones pertenecen a una categoría o valor específico.
+
+**Propiedad:**
+
+$$∑i=1kfi=N\sum_{i=1}^{k} f_i = Ni=1∑k​fi​=N$$
+
+Es decir, la suma de todas las frecuencias absolutas debe ser igual al total de datos.
+
+b)  $$Frecuencia relativa (hi)(h_i)(hi​)$$
+
+Es la proporción de veces que aparece un valor respecto al total de observaciones.
+
+$$hi=fiNh_i = \frac{f_i}{N}hi​=Nfi​​$$
+
+**Interpretación:**
+
+Mide el peso proporcional de cada categoría dentro del total.
+
+**Propiedad:**
+
+$$∑i=1khi=1\sum_{i=1}^{k} h_i = 1i=1∑k​hi​=1$$
+
+**c) Frecuencia porcentual** $$(pi)(p_i)(pi​)$$ <br>
+
+Es la frecuencia relativa expresada en porcentaje.
+
+$$pi=hi⋅100=fiN⋅100p_i = h_i \cdot 100 = \frac{f_i}{N}\cdot 100pi​=hi​⋅100=Nfi​​⋅100$$
+
+Interpretación:
+
+Permite interpretar fácilmente el peso porcentual de cada categoría.
+
+**d) Frecuencia absoluta acumulada** $$(Fi)(F_i)(Fi​)$$
+
+Es la suma progresiva de las frecuencias absolutas hasta el valor $xi$,$x_i$,$xi$​.
+
+$$Fi=∑j=1ifjF_i = \sum_{j=1}^{i} f_jFi​=j=1∑i​fj​$$
+
+**Interpretación:**
+
+Indica cuántas observaciones son menores o iguales a xix_ixi​.
+
+**Propiedad:**
+
+$$Fk=NF_k = NFk​=N$$
+
+**Nota:** solo tiene sentido en variables ordinales o cuantitativas.
+
+**e) Frecuencia relativa acumulada (Hi)(H_i)(Hi​)**
+
+Es la suma progresiva de las frecuencias relativas.
+
+$$Hi=∑j=1ihj=FiNH_i = \sum_{j=1}^{i} h_j = \frac{F_i}{N}Hi​=j=1∑i​hj​=NFi​​$$
+
+**Interpretación:**
+
+Representa la proporción acumulada de observaciones hasta xix_ixi​.
+
+**Propiedad:**
+
+$$Hk=1H_k = 1Hk​=1$$
+
+**f) Frecuencia porcentual acumulada (Pi)(P_i)(Pi​)**
+
+Es la frecuencia relativa acumulada en porcentaje.
+
+$$Pi=Hi⋅100P_i = H_i \cdot 100Pi​=Hi​⋅10$$
+
+**Interpretación:**
+
+Indica el porcentaje acumulado hasta cada categoría o valor.
+
+**Estructura general de una tabla unidimensional**
+
+| Valor $xix_ixi$​ | Frecuencia absoluta $fif_ifi$​ | Frecuencia relativa $hih_ihi$​ | Porcentaje $pip_ipi$​ | Frecuencia acumulada $FiF_iFi$​ | Frecuencia relativa acumulada $HiH_iHi$​ |
+|------------|------------|------------|------------|------------|------------|
+| $x1x_1x1$​ | $f1f_1f1$​ | $h1h_1h1$​ | $p1p_1p1$​ | $F1F_1F1$​ | $H1H_1H1$​ |
+| $x2x_2x2$​ | $f2f_2f2$​ | $h2h_2h2$​ | $p2p_2p2$​ | $F2F_2F2$​ | $H2H_2H2$​ |
+| ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ |
+| $xkx_kxk$​ | $fkf_kfk$​ | $hkh_khk$​ | $pkp_kpk$​ | $FkF_kFk$​ | $HkH_kHk$​ |
+
+**Interpretación analítica**
+
+Desde el análisis de datos, una tabla unidimensional permite:
+
+-   detectar concentración de datos;
+
+-   observar dispersión;
+
+-   identificar categorías dominantes;
+
+-   construir histogramas, barras y polígonos;
+
+-   preparar análisis inferencial.
+
+Es el primer paso para entender la **estructura interna de una variable**.
+
+**Tablas de contingencia (cruce de dos variables)**
+
+Cuando se estudian simultáneamente dos variables, se utiliza una tabla de contingencia o tabla de doble entrada.
+
+Estas tablas permiten analizar la relación entre dos variables categóricas o discretas.
+
+**Definición**
+
+Sean dos variables:
+
+-   $XXX:$ con $rrr$ categorías
+
+-   $YYY:$ con $ccc$ categorías
+
+# Base de datos
+
+```{r}
+
+
+library(readxl)
+
+Sector <- read_excel("datos/sector.xlsx") 
+
+View(Sector)
+
+```
+
+# Conocer el dataset
+
+*Mostrar algunas filas del dataset*
+
+```{r}
+head(Sector)
+```
+
+**Numero de variables**
+
+```{r}
+Sector %>% names %>% length()
+```
+
+**Nombres de variables**
+
+```{r}
+names(Sector)
+```
+
+**Estructura de variables**
+
+```{r}
+library(dplyr)
+
+glimpse(Sector)
+```
+
+**Transformar las variables**
+
+```{r}
+Sector$GENERO <- as.factor(Sector$SECTOR)
+Sector$NIVEL <- factor(Sector$NIVEL, 
+                              levels = c("Alta", "Media", "Baja"), ordered = TRUE)
+Sector$SATISFACCION <- factor(Sector$SATISFACCION, 
+                              levels = c("Muy Insatisfecho", "Insatisfecho", "Neutral", "Satisfecho", "Muy Satisfecho"), ordered = TRUE)
+Sector$PARTICIPACION <- factor(Sector$PARTICIPACION, 
+                              levels = c("Nunca", "Rara vez", "A veces", "Frecuentemente", "Siempre"), ordered = TRUE)
+
+```
+
+**Nueva Estructura de variables**
+
+```{r}
+glimpse(Sector)
+```
+
+# *Graficas y tablas*
+
+## Variable Nominal
+
+::: callout-important
+\*\* La variable nominal tiene solo frecuencia absoluta, relativa y porcentaje\*\*
+:::
+
+\*\* Análisis de frecuencias del Sector laboral de los encuentados\*\*
+
+::: panel-tabset
+## Tablas
+
+```{r}
+# Crear la tabla original
+tabla <- tibble(Sector = Sector$SECTOR) %>% 
+  group_by(Sector) %>% 
+  summarise(fi = n()) %>%
+  mutate(
+    hi = round(fi / sum(fi), 4),
+    Porcentaje = paste0(round(hi * 100, 2), "%")
+  )
+
+# Convertir columna a character
+tabla <- tabla %>% 
+  mutate(
+    Sector = as.character(Sector)
+  )
+
+# Añadir fila de totales
+totales <- tibble(
+  Sector = "Total",
+  fi = sum(tabla$fi),
+  hi = round(sum(tabla$hi), 4),
+  Porcentaje = paste0(round(sum(tabla$hi) * 100, 2), "%")
+)
+
+# Combinar tablas
+tabla_final <- bind_rows(tabla, totales)
+
+# Mostrar tabla final
+tabla_final %>% 
+  knitr::kable(
+    col.names = c("Sector", "$f_i$", "$h_i$", "Porcentaje"),
+    align = c("l", "c", "c", "c")
+  )
+```
+
+## Bases
+
+```{r}
+# Cargar las librerías necesarias
+library(ggplot2)
+library(dplyr)
+library(readxl)
+
+# Calcular los porcentajes de cada categoría en la variable SECTOR
+sector_counts <- Sector %>%
+  dplyr::count(SECTOR) %>%
+  mutate(porcentaje = n / sum(n) * 100)
+
+# Crear el diagrama de barras
+ggplot(sector_counts, aes(x = SECTOR, y = porcentaje, fill = SECTOR)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Distribución porcentual del sector de los encuestados",
+    x = "Sector",
+    y = "Porcentaje"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  geom_text(
+    aes(label = sprintf("%.1f%%", porcentaje)),
+    vjust = -0.5,
+    color = "black",
+    size = 3.5
+  )
+```
+
+## Sectores
+
+```{r}
+# Cargar las librerías necesarias
+library(ggplot2)
+library(dplyr)
+library(readxl)
+
+# Calcular los porcentajes de cada categoría en la variable SECTOR
+sector_counts <- Sector %>%
+  dplyr::count(SECTOR) %>%
+  mutate(porcentaje = n / sum(n) * 100)
+
+# Crear el diagrama circular
+ggplot(sector_counts, aes(x = "", y = porcentaje, fill = SECTOR)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y") +
+  labs(
+    title = "Distribución porcentual del sector de los encuestados"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid = element_blank(),
+    axis.text.x = element_blank()
+  ) +
+  geom_text(
+    aes(label = sprintf("%.1f%%", porcentaje)),
+    position = position_stack(vjust = 0.5),
+    color = "white",
+    size = 4
+  )
+```
+
+## Interpretacion
+
+La distribución de frecuencias correspondiente al sector laboral de 200 trabajadores de la función pública de la ciudad de [Ibagué]{.underline} evidencia una participación relativamente equilibrada entre las diferentes áreas institucionales, aunque con una ligera concentración en los sectores de Seguridad y Educación. El sector Seguridad presenta la mayor frecuencia absoluta con 46 trabajadores (23%), seguido por Educación con 44 funcionarios (22%) y Sector Salud con 40 trabajadores (20%). Por su parte, Transporte representa el 18% y el área Administrativa el 17% de la población analizada. Desde una perspectiva estadística, estos resultados indican una distribución organizacional moderadamente homogénea, sin diferencias extremas entre categorías, lo que sugiere una estructura laboral diversificada en la administración pública estudiada. Asimismo, la cercanía porcentual entre sectores refleja una asignación relativamente balanceada del talento humano, aunque con mayor concentración funcional en áreas estratégicas relacionadas con seguridad ciudadana, educación y servicios de salud.
+:::
+
+## Variable Ordinal
+
+::: callout-tip
+## La variable ordinal tiene los cuatro tipos de frecuencias
+:::
+
+Nivel de satisfaccion de los trabajadores encuestados
+
+::: panel-tabset
+## Tabla
+
+```{r}
+# Crear la tabla original
+tabla <- tibble(Satisfaccion = Sector$SATISFACCION) %>% 
+  group_by(Satisfaccion) %>% 
+  summarise(fi = n()) %>%
+  mutate(
+    hi = round(fi / sum(fi), 4),
+    Porcentaje = paste0(round(hi * 100, 2), "%")
+  )
+
+# Convertir las columnas a character
+tabla <- tabla %>% 
+  mutate(
+    Satisfaccion = as.character(Satisfaccion)
+  )
+
+# Añadir la fila de totales
+totales <- tibble(
+  Satisfaccion = "Total",
+  fi = sum(tabla$fi),
+  hi = round(sum(tabla$hi), 4),
+  Porcentaje = paste0(round(sum(tabla$hi) * 100, 2), "%")
+)
+
+# Combinar tablas
+tabla_final <- bind_rows(tabla, totales)
+
+# Mostrar la tabla final
+tabla_final %>% 
+  knitr::kable(
+    col.names = c("Satisfacción", "$f_i$", "$h_i$", "Porcentaje"),
+    align = c("l", "c", "c", "c")
+  )
+```
+
+## Barras
+
+```{r}
+# Cargar las librerías necesarias
+library(ggplot2)
+library(dplyr)
+library(readxl)
+
+# Calcular los porcentajes de cada categoría en la variable SATISFACCION
+satisfaccion_counts <- Sector %>%
+  dplyr::count(SATISFACCION) %>%
+  mutate(porcentaje = n / sum(n) * 100)
+
+# Crear el diagrama de barras
+ggplot(satisfaccion_counts, aes(x = SATISFACCION, y = porcentaje, fill = SATISFACCION)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Distribución porcentual del nivel de satisfacción",
+    x = "Satisfacción",
+    y = "Porcentaje"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  geom_text(
+    aes(label = sprintf("%.1f%%", porcentaje)),
+    vjust = -0.5,
+    color = "black",
+    size = 3.5
+  )
+```
+
+## Sectores
+
+```{r}
+# Cargar las librerías necesarias
+library(ggplot2)
+library(dplyr)
+library(readxl)
+
+# Calcular los porcentajes de cada categoría en la variable SATISFACCION
+satisfaccion_counts <- Sector %>%
+  dplyr::count(SATISFACCION) %>%
+  mutate(porcentaje = n / sum(n) * 100)
+
+# Crear el diagrama circular
+ggplot(satisfaccion_counts, aes(x = "", y = porcentaje, fill = SATISFACCION)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y") +
+  labs(
+    title = "Distribución porcentual del nivel de satisfacción"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid = element_blank(),
+    axis.text.x = element_blank()
+  ) +
+  geom_text(
+    aes(label = sprintf("%.1f%%", porcentaje)),
+    position = position_stack(vjust = 0.5),
+    color = "white",
+    size = 4
+  )
+```
+
+## Interpretacion
+
+La distribución de frecuencias correspondiente al nivel de satisfacción de 200 trabajadores de la función pública de la ciudad de [Ibagué]{.underline} evidencia una percepción laboral relativamente heterogénea y equilibrada entre categorías positivas y negativas. Los niveles de “Muy Insatisfecho” (21.5%) y “Muy Satisfecho” (21%) presentan las mayores proporciones dentro de la muestra, seguidos de las categorías “Insatisfecho” (20%), “Satisfecho” (19%) y “Neutral” (18.5%). Desde una perspectiva estadística, los resultados muestran una distribución casi uniforme de las respuestas, sin una concentración dominante en una única categoría de satisfacción. Analíticamente, esto sugiere la coexistencia de percepciones laborales divergentes dentro de la administración pública, evidenciando tanto grupos con altos niveles de conformidad institucional como sectores con percepciones negativas frente a sus condiciones laborales. La reducida diferencia porcentual entre categorías indica una variabilidad moderada en la percepción de satisfacción, aspecto relevante para estudios sobre clima organizacional, bienestar laboral y gestión del talento humano en entidades públicas.
+:::
+
+## **Variable Discreta**
+
+::: callout-warning
+## La variable discreta tiene los cuatro tipos de frecuencias
+:::
+
+Distribución de frecuencias de los encuestados según el número de hijos los trabajadores encuestados
+
+::: panel-tabset
+## Tabla
+
+```{r}
+# Crear la tabla original
+tabla <- tibble(Hijos = Sector$HIJOS) %>% 
+  group_by(Hijos) %>% 
+  summarise(fi = n()) %>%
+  mutate(
+    hi = round(fi / sum(fi), 4),
+    Porcentaje = paste0(round(hi * 100, 2), "%"),
+    Fi = cumsum(fi),
+    Hi = cumsum(hi)
+  )
+
+# Convertir columnas a character
+tabla <- tabla %>% 
+  mutate(
+    Hijos = as.character(Hijos),
+    Fi = as.character(Fi),
+    Hi = as.character(Hi)
+  )
+
+# Añadir fila de totales
+totales <- tibble(
+  Hijos = "Total",
+  fi = sum(tabla$fi),
+  hi = round(sum(tabla$hi), 4),
+  Porcentaje = paste0(round(sum(tabla$hi) * 100, 2), "%"),
+  Fi = "",
+  Hi = ""
+)
+
+# Combinar tablas
+tabla_final <- bind_rows(tabla, totales)
+
+# Mostrar tabla final
+tabla_final %>% 
+  knitr::kable(
+    col.names = c("Número de Hijos", "fi", "hi", "Porcentaje", "Fi", "Hi"),
+    align = c("l", "r", "r", "r", "r", "r")
+  )
+```
+
+## Bastones
+
+```{r}
+# Cargar librerías necesarias
+library(ggplot2)
+library(dplyr)
+
+# Crear tabla de frecuencias para HIJOS
+tabla_hijos <- Sector %>%
+  count(HIJOS) %>%
+  mutate(
+    hi = round(n / sum(n), 4)
+  )
+
+# Gráfico de bastones
+ggplot(tabla_hijos, aes(x = HIJOS, y = hi)) +
+  geom_point(shape = 18, color = "red", size = 3) +
+  geom_segment(aes(xend = HIJOS, yend = 0),
+               linewidth = 1,
+               color = "blue") +
+  labs(
+    x = "Número de Hijos",
+    y = "Frecuencia relativa",
+    title = "Diagrama de bastones del número de hijos"
+  ) +
+  theme_minimal() +
+  geom_text(
+    aes(label = hi),
+    vjust = -0.5
+  )
+```
+
+## Escalonado
+
+```{r}
+# Cargar librerías
+library(ggplot2)
+library(dplyr)
+library(tibble)
+
+# Crear tabla de frecuencias acumuladas para HIJOS
+df <- Sector %>%
+  count(HIJOS) %>%
+  mutate(
+    hi = n / sum(n),
+    Hi = cumsum(hi)
+  )
+
+# Gráfica de función de distribución acumulada
+ggplot(df, aes(x = HIJOS, y = Hi)) +
+  geom_step(color = "#2C3E50", linewidth = 1.2) +
+  geom_point(color = "#E74C3C", size = 3) +
+  scale_x_continuous(breaks = df$HIJOS) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(
+    title = "Función de Distribución Acumulada (FDA)",
+    x = "Número de Hijos",
+    y = "Frecuencia relativa acumulada (Hi)"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    panel.grid.minor = element_blank()
+  )
+```
+
+## Interpretacion
+
+La distribución de frecuencias correspondiente al número de hijos de 200 trabajadores de la función pública de la ciudad de [Ibagué]{.underline} evidencia una composición demográfica relativamente homogénea entre las diferentes categorías analizadas. El mayor porcentaje de trabajadores se concentra en quienes tienen 4 hijos, con una frecuencia absoluta de 48 individuos (24%), seguido de los grupos con 1 hijo (19.5%), 2 hijos (19%) y 3 hijos (19%), mientras que los trabajadores con 5 hijos representan el 18.5% de la muestra. Desde una perspectiva estadística, la distribución presenta variaciones moderadas entre categorías, sin diferencias extremas en la frecuencia relativa. Asimismo, la frecuencia acumulada indica que el 57.5% de los trabajadores tiene hasta 3 hijos, mientras que el 81.5% posee hasta 4 hijos. Analíticamente, estos resultados sugieren una estructura familiar relativamente equilibrada dentro de la población estudiada, aspecto relevante para estudios de caracterización sociodemográfica, bienestar laboral y análisis de cargas familiares en el sector público.
+:::
+
+## **Variable Continua**
+
+::: callout-warning
+## La variable continua se tabula con intervalos
+:::
+
+**Generación de intervalos EDAD**
+
+::: panel-tabset
+## Minimo
+
+```{r}
+Min <- min(Sector$EDAD)
+Min
+```
+
+## Maximo
+
+```{r}
+Max <- max(Sector$EDAD)
+Max
+```
+
+## Rango
+
+```{r}
+R <- Max-Min
+R
+```
+
+## Intervalos
+
+```{r}
+m <- ceiling(1 + 3.322*log10(nrow(deporte)))
+m
+```
+
+## Amplitud
+
+```{r}
+A <- ceiling((R/m) * 1) / 1
+A
+```
+
+## Rango corregido
+
+```{r}
+RC <- A*m
+RC
+```
+:::
+
+::: callout-caution
+## La amplitud debe tener tanto decimales como lo tienen los datos originales. Si tiene un decimal la fórmula se multiplica y se divide por 10. Si tiene dos decimales la fórmula se multiplica y se divide por 100 y así sucesivamente
+:::
+
+::: panel-tabset
+## Diferencia
+
+```{r}
+D <- RC-R
+D
+```
+
+## Minimo corregido
+
+```{r}
+Xmin <- Min-4
+Xmin
+```
+
+## Maximo corregido
+
+```{r}
+Xmax <- Max+4
+Xmax
+```
+:::
+
+::: callout-important
+## La diferencia se debe dividir en dos números lo más equitativos de tal manera que estos números tengan tantos decimales como los datos originales. Al mínimo se le resta uno de los números y al máximo se le suma el otro
+:::
+
+**Distribución de frecuencias de la edad de los trabajadores encuestados**
+
+::: panel-tabset
+## Tabla
+
+```{r}
+library(dplyr)
+library(kableExtra)
+
+m1 <- (Xmin+(Xmin+A))/2
+
+interv = cut(x = Sector$EDAD, breaks = seq(Xmin, Xmax, by = A), include.lowest = TRUE)
+
+tabla <- tibble(Edad = interv) %>% 
+  group_by(Edad) %>% 
+  summarise(fi = n()) %>% 
+  mutate(hi = fi / sum(fi)) %>% 
+  mutate(
+    mi = seq(m1, by = A, length.out = n()) %>% as.character(),
+  Fi = cumsum(fi) %>% as.character(),
+  Hi = cumsum(fi / sum(fi)) %>% as.character()
+  ) %>% 
+  relocate(Edad, mi, fi)
+  
+
+# Agregar la fila total con casillas en blanco
+tabla <- tabla %>% 
+  add_row(Edad = "Total", mi = "", fi = sum(tabla$fi), hi = sum(tabla$hi), Fi = "", Hi = "")
+
+# Generar la tabla con knitr::kable y agregar título
+tabla %>% 
+  knitr::kable(
+    col.names = c("Edad", "mi", "fi", "hi", "Fi", "Hi"), 
+    align = c("l", "r", "r", "r", "r", "r")
+  ) %>% 
+  kableExtra::kable_styling(full_width = FALSE) %>% 
+  kableExtra::add_header_above(c("Distribuciones de frecuencias para la variable Edad" = 6))
+```
+
+## Histograma
+
+```{r}
+# Librerías
+library(ggplot2)
+
+# Dataframe (tus datos)
+edad <- data.frame(
+  li = c(26, 31, 36, 41, 46, 51, 56, 61, 66, 71),
+  ls = c(31, 36, 41, 46, 51, 56, 61, 66, 71, 76),
+  fi = c(29, 127, 143, 33, 33, 36, 34, 32, 31, 2)
+)
+
+# Histograma real con intervalos
+ggplot(edad) +
+  geom_rect(aes(
+    xmin = li,
+    xmax = ls,
+    ymin = 0,
+    ymax = fi
+  ),
+  fill = "steelblue",
+  color = "black"
+  ) +
+  labs(
+    title = "Histograma de la edad de los trabajadores",
+    x = "Edad",
+    y = "Frecuencia"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+```
+
+## Ojiva
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tibble)
+
+edad <- tibble(
+  li = c(26, 31, 36, 41, 46, 51, 56, 61, 66, 71),
+  ls = c(31, 36, 41, 46, 51, 56, 61, 66, 71, 76),
+  fi = c(29, 127, 143, 33, 33, 36, 34, 32, 31, 2)
+)
+
+# Calcular acumuladas
+edad <- edad %>% 
+  mutate(
+    Fi = cumsum(fi),
+    Hi = Fi / sum(fi)
+  )
+
+# Graficar ojiva
+ggplot(edad, aes(x = ls, y = Hi)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "red", size = 2) +
+  labs(
+    title = "Ojiva de la edad de los trabajadores",
+    x = "Edad (límite superior del intervalo)",
+    y = "Frecuencia acumulada relativa"
+  ) +
+  scale_y_continuous(labels = scales::percent) +
+  theme_minimal()
+```
+
+## Densidad
+
+```{r}
+# Librerías
+library(dplyr)
+
+edad <- data.frame(
+  mi = c(28.5, 33.5, 38.5, 43.5, 48.5, 53.5, 58.5, 63.5, 68.5, 73.5),
+  fi = c(29, 127, 143, 33, 33, 36, 34, 32, 31, 2)
+)
+
+edad_expandida <- edad %>%
+  slice(rep(1:n(), fi))
+
+dens <- density(edad_expandida$mi)
+
+plot(dens,
+     main = "Densidad",
+     xlab = "Edad",
+     ylab = "Densidad",
+     col = "red",
+     lwd = 2)
+
+polygon(dens, col = rgb(1, 0, 0, 0.5), border = "red")
+```
+
+## Interpretacion
+
+La distribución de frecuencias de la variable edad en 200 trabajadores de la función pública de la ciudad de [Ibagué]{.underline} evidencia una composición etaria relativamente equilibrada entre los diferentes intervalos analizados, aunque con una ligera concentración en los grupos más jóvenes y próximos a la etapa de madurez laboral. El intervalo entre 20 y 25 años presenta la mayor frecuencia relativa con 15.5% de los trabajadores, seguido del rango entre 50 y 55 años con 15%, mientras que los demás grupos oscilan entre el 10% y el 12.5% de participación. Desde una perspectiva estadística, la distribución muestra una dispersión moderada y ausencia de concentraciones extremas, lo que sugiere una estructura demográfica heterogénea dentro de la población estudiada. Asimismo, la frecuencia acumulada indica que el 51% de los funcionarios tiene hasta 40 años y el 73.5% se encuentra por debajo de los 50 años, evidenciando un predominio de trabajadores en edades productivas intermedias. Analíticamente, estos resultados reflejan una fuerza laboral diversa en términos generacionales, aspecto relevante para estudios sobre gestión del talento humano, envejecimiento laboral y planificación institucional en el sector público.
+:::
+
+## **Tablas de contingencia**
+
+**Tipos de frecuencias en tablas de contingencia**
+
+**Frecuencia absoluta conjunta** $(fij)(f_{ij})(fij​)$
+
+Es el número de observaciones que pertenecen simultáneamente a la categoría $iii$ de $XXX$ y $jjj$ de $YYY$.
+
+$$fijf_{ij}fij​$$
+
+**Interpretación:**
+
+Mide la ocurrencia conjunta de dos eventos o categorías.
+
+**Frecuencia relativa conjunta** $$(hij)(h_{ij})(hij​)$$
+
+Es la proporción conjunta respecto al total.
+
+$$hij=fijNh_{ij} = \frac{f_{ij}}{N}hij​=Nfij​​$$
+
+**Interpretación:**
+
+Representa la probabilidad empírica conjunta.
+
+**Frecuencia marginal de filas** $$(fi⋅)(f_{i\cdot})(fi⋅​$$
+
+Es la suma de las frecuencias de una fila.
+
+$$fi⋅=∑j=1cfijf_{i\cdot} = \sum_{j=1}^{c} f_{ij}fi⋅​=j=1∑c​fij​$$
+
+**Interpretación:**
+
+Representa la distribución total de la variable XXX.
+
+**Frecuencia marginal de columnas** $$(f⋅j)(f_{\cdot j})(f⋅j​)$$
+
+Es la suma de las frecuencias de una columna.
+
+$$f⋅j=∑i=1rfijf_{\cdot j} = \sum_{i=1}^{r} f_{ij}f⋅j​=i=1∑r​fij​$$
+
+**Interpretación:**
+
+Representa la distribución total de la variable YYY.
+
+**e) Frecuencia relativa marginal**
+
+Para filas:
+
+$$hi⋅=fi⋅Nh_{i\cdot} = \frac{f_{i\cdot}}{N}hi⋅​=Nfi⋅​​$$
+
+Para columnas:
+
+$$h⋅j=f⋅jNh_{\cdot j} = \frac{f_{\cdot j}}{N}h⋅j​=Nf⋅j​​$$
+
+**Interpretación:**
+
+Muestran la distribución proporcional marginal de cada variable.
+
+**Frecuencia relativa condicional**
+
+Permite analizar una variable condicionada por la otra.
+
+**Condicionada por fila:**
+
+$$hj∣i=fijfi⋅h_{j|i} = \frac{f_{ij}}{f_{i\cdot}}hj∣i​=fi⋅​fij​​$$
+
+**Interpretación:**
+
+proporción de la categoría jjj de YYY dentro de la categoría iii de XXX.
+
+**Condicionada por columna:**
+
+$$hi∣j=fijf⋅jh_{i|j} = \frac{f_{ij}}{f_{\cdot j}}hi∣j​=f⋅j​fij​​$$
+
+**Interpretación:**
+
+proporción de la categoría iii de XXX dentro de la categoría jjj de YYY.
+
+Estas son esenciales para estudiar asociación o dependencia entre variables.
+
+**Estructura general de una tabla de contingencia**
+
+| $X\YX \backslash YX\\Y$ | $y1y_1y1$​ | $y2y_2y2$​ | ⋯\cdots⋯ | $ycy_cyc$​ | Total |
+|------------|------------|------------|------------|------------|------------|
+| $x1x_1x1$​ | $f11f_{11}f11$​ | $f12f_{12}f12$​ | ⋯\cdots⋯ | $f1cf_{1c}f1c$​ | $f1⋅f_{1\cdot}f1$⋅​ |
+| $x2x_2x2$​ | \$ f21f\_{21}f21​\$ | \$f22f\_{22}f22​ \$ | ⋯\cdots⋯ | $f2cf_{2c}f2c​$ | $f2⋅f_{2\cdot}f2⋅$​ |
+| ⋮\vdots⋮ | ⋮\vdots⋮ | ⋮\vdots⋮ | ⋱\ddots⋱ | ⋮\vdots⋮ | ⋮\vdots⋮ |
+| $xrx_rxr​$ | $fr1f_{r1}fr1​$ | $fr2f_{r2}fr2​$ | ⋯\cdots⋯ | $frcf_{rc}frc​$ | $fr⋅f_{r\cdot}fr⋅$​ |
+| Total | $f⋅1f_{\cdot1}f⋅1​$ | $f⋅2f_{\cdot2}f⋅2$​ | ⋯\cdots⋯ | $f⋅cf_{\cdot c}f⋅c$​ | \$ NNN\$ |
+
+**Interpretación analítica de tablas de contingencia**
+
+Una tabla de contingencia permite:
+
+-   estudiar asociación entre variables;
+
+-   identificar patrones conjuntos;
+
+-   comparar perfiles entre grupos;
+
+-   calcular probabilidades conjuntas, marginales y condicionales;
+
+-   evaluar independencia estadística.
+
+Es la base para pruebas como:
+
+-   Chi-cuadrado de independencia
+
+-   V de Cramer
+
+-   Coeficiente de contingencia
+
+**Diferencia conceptual clave**
+
+-   **Tabla unidimensional**: describe una sola variable.
+
+-   **Tabla de contingencia**: analiza simultáneamente dos variables y su posible relación.
+
+La primera resume, y la segunda compara y relaciona.
+
+**Conclusión técnica**
+
+Desde la estadística descriptiva, las tablas de frecuencias constituyen el primer nivel de modelación de datos.
+
+-   Las **tablas unidimensionales** permiten describir la estructura interna de una variable.
+
+-   Las **tablas de contingencia** permiten estudiar relaciones entre variables y constituyen la base del análisis bivariado.
+
+En análisis de datos, ambas son esenciales porque convierten observaciones dispersas en estructuras interpretables, comparables y analíticamente útiles. Su valor no está solo en ordenar datos, sino en revelar comportamiento estadístico.
